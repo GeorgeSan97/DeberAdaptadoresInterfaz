@@ -1,4 +1,5 @@
 ﻿// Adonet
+/*
 using Microsoft.Data.SqlClient;
 using System.Data;
 using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
@@ -124,10 +125,10 @@ VALUES (
 	}
 }
 
+*/
 
 
 
-/*
 //Dapper
 using Dapper;
 using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
@@ -251,7 +252,7 @@ VALUES (
 		}
 	}
 }
-*/
+
 
 
 
