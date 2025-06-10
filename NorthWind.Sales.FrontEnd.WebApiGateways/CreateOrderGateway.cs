@@ -1,6 +1,7 @@
 ﻿using NorthWind. Sales.Entities.Dtos.CreateOrder;
 using NorthWind.Sales.Entities.ValueObjects;
-using NrothWind.FrontEnd.BusinessObjects.Interfaces;
+using NorthWind.Sales.Frontend.BusinessObjects.Interfaces;
+
 using System.Net.Http.Json;
 
 namespace NorthWind.Sales.FrontEnd.WebApiGateways
@@ -8,7 +9,8 @@ namespace NorthWind.Sales.FrontEnd.WebApiGateways
 	public class CreateOrderGateway(HttpClient client) : ICreateOrderGateway
 	{
 		int OrderId = 0;
-		public async Task<int> CreateOrderGatewayAsync(CreateOrderDto order)
+
+		public async Task<int> CreateOrderAsync(CreateOrderDto order)
 		{
 			var Response = await client.PostAsJsonAsync(Endpoints.CreateOrder, order);
 
@@ -18,9 +20,11 @@ namespace NorthWind.Sales.FrontEnd.WebApiGateways
 			}
 			else
 			{
-				
+
 			}
 			return OrderId;
-
 		}
+
+	
 	}
+}
