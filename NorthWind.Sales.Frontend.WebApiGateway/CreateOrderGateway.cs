@@ -9,6 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using static NorthWind.Sales.Entities.Dtos.CreateOrder.CreateOrderDto;
 
+
 namespace NorthWind.Sales.Frontend.WebApiGateways
 {
 	internal class CreateOrderGateway(HttpClient client) : ICreateOrderGateway
