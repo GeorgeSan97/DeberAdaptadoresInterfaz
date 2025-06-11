@@ -7,6 +7,7 @@ using System.Linq;
 using System.Net.Http.Json;
 using System.Text;
 using System.Threading.Tasks;
+using static NorthWind.Sales.Entities.Dtos.CreateOrder.CreateOrderDto;
 
 namespace NorthWind.Sales.Frontend.WebApiGateways
 {
@@ -14,15 +15,17 @@ namespace NorthWind.Sales.Frontend.WebApiGateways
 	{
 		public async Task<int> CreateOrderAsync(CreateOrderDto order)
 		{
-			int orderId = 0;
-			var Response = await client.PostAsJsonAsync(
-				Endpoints.CreateOrder, order);
+			CreateOrderResponseDto result = null;
 
-			if (Response.IsSuccessStatusCode)
+			var response = await client.PostAsJsonAsync(Endpoints.CreateOrder, order);
+
+			if (response.IsSuccessStatusCode)
 			{
-				orderId = await Response.Content.ReadFromJsonAsync<int>();
+				result = await response.Content.ReadFromJsonAsync<CreateOrderResponseDto>();
 			}
-			return orderId;
+
+			// Fix: Return the OrderId property from the CreateOrderResponseDto object
+			return result?.OrderId ?? 0;
 		}
 	}
 }

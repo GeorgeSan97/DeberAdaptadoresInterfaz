@@ -3,16 +3,27 @@ using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
 using NorthWind.Sales.BlazorClient;
 using NorthWind.Sales.Frontend.IoC;
 
-var builder = WebAssemblyHostBuilder.CreateDefault(args);
-builder.RootComponents.Add<App>("#app");
-builder.RootComponents.Add<HeadOutlet>("head::after");
-
-
-
-builder.Services.AddNorthWindSalesServices(client =>
+public static class Program
 {
-	client.BaseAddress =
-	new Uri(builder.Configuration["WebApiAddress"]);
-});
+	private static async Task Main(string[] args)
+	{
+		var builder = WebAssemblyHostBuilder.CreateDefault(args);
+		builder.Configuration.AddJsonFile("appsettings.json", optional: false, reloadOnChange: false);
 
-await builder.Build().RunAsync();
+		builder.RootComponents.Add<App>("#app");
+		builder.RootComponents.Add<HeadOutlet>("head::after");
+
+		string? webApiAddress = builder.Configuration["WebApiAddress"];
+		if (string.IsNullOrEmpty(webApiAddress))
+		{
+			throw new InvalidOperationException("La dirección de la API web no está configurada en 'appsettings.json'.");
+		}
+
+		builder.Services.AddNorthWindSalesServices(client =>
+		{
+			client.BaseAddress = new Uri(webApiAddress);
+		});
+
+		await builder.Build().RunAsync();
+	}
+}

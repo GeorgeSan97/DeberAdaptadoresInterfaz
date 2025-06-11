@@ -13,4 +13,9 @@ public class CreateOrderDto(string customerId, string shipAddress, string shipCi
   public string ShipCountry => shipCountry;
   public string ShipPostalCode => shipPostalCode;
   public IEnumerable<CreateOrderDetailDto> OrderDetails => orderDetails;// detalles de la orden.
+
+	public class CreateOrderResponseDto
+	{
+		public int OrderId { get; set; }
+	}
 }
