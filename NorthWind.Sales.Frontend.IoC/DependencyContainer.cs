@@ -16,7 +16,9 @@ namespace NorthWind.Sales.Frontend.IoC
 		Action<HttpClient> configureHttpClient)
 		{
 			services.AddWebApiGateways(configureHttpClient)
-			.AddViewsServices();
+			.AddViewsServices()
+			.AddValidationService()
+			.AddValidators();
 			return services;
 		}
 	}

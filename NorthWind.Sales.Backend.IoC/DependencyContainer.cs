@@ -11,13 +11,16 @@ namespace Microsoft.Extensions.DependencyInjection;
 public static  class DependencyContainer
 {
 	public static IServiceCollection AddNorthWindSalesServices(
-this IServiceCollection services,
-Action<DBOptions> configureDBOptions)
+	this IServiceCollection services,
+	Action<DBOptions> configureDBOptions)
 	{
 		services.AddUserCasesServices()
 		.AddRepositories()
 		.AddDataContexts(configureDBOptions)
-		.AddPresenters();
+		.AddPresenters()
+		.AddValidationService()
+		.AddValidators();
+
 		return services;
 	}
 }

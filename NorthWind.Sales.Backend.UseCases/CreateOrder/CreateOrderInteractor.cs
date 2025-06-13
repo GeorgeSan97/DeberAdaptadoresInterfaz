@@ -1,7 +1,9 @@
 ﻿using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
+using NorthWind.Sales.Backend.BusinessObjects.Guards;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.CreateOrder;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.Repositories;
 using NorthWind.Sales.Entities.Dtos.CreateOrder;
+using NorthWind.Validation.Entities.Interfaces;
 
 namespace NorthWind.Sales.Backend.UseCases.CreateOrder;
 
@@ -44,17 +46,34 @@ namespace NorthWind.Sales.Backend.UseCases.CreateOrder;
 //             mediante la técnica-mecanismo de "Inyección de dependencias a través del
 //             constructor", "outputPort, repository".
 
-internal class CreateOrderInteractor(ICreateOrderOutputPort outputPort,
-ICommandsRepository repository) : ICreateOrderInputPort
+internal class CreateOrderInteractor(
+    ICreateOrderOutputPort outputPort,
+    ICommandsRepository repository,
+    IModelValidatorHub<CreateOrderDto> modelValidatorHub) : 
+    ICreateOrderInputPort
 {
 
   //  1).- El "Controller" le pasa los datos al "InputPort", esos "Datos" se pasan en un "Dto"
   //       desde la UI y para recibir los datos utilizamos el método "Handle" y su parámetro.
+
+
   public async Task Handle(CreateOrderDto orderDto)
   {
-    //  2).- Una vez que se recibe los datos necesarios para realizar el proceso (desde un "Dto" se mapea(transforma) a un objeto
-    //       de tipo "OrderAggregate" para construir la orden (maestro-detalle).
-    OrderAggregate Order = OrderAggregate.From(orderDto);
+	/*
+		La cláusula Guard lanzará una excepción en caso de que el modelo no sea válido. En este caso
+	    de uso utilizaremos la técnica de lanzamiento de Excepción para implementar el flujo alterno
+	    del caso de uso, en lecciones posteriores implementaremos el patrón Result para implementar
+	    el flujo alterno del caso de uso para manejo de errores de validación.
+    */
+
+
+		await GuardModel.AgainstNotValid(modelValidatorHub, orderDto);
+
+
+
+	//  2).- Una vez que se recibe los datos necesarios para realizar el proceso (desde un "Dto" se mapea(transforma) a un objeto
+	//       de tipo "OrderAggregate" para construir la orden (maestro-detalle).
+	OrderAggregate Order = OrderAggregate.From(orderDto);
 
     //  3).- Guardar la orden (agregado).
     await repository.CreateOrder(Order);
