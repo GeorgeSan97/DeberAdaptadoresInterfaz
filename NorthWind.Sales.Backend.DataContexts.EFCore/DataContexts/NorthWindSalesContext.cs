@@ -2,12 +2,8 @@
 using Microsoft.Extensions.Options;
 using NorthWind.Sales.Backend.BusinessObjects.POCOEntities;
 using NorthWind.Sales.Backend.DataContexts.EFCore.Options;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using NorthWind.Sales.Backend.Repositories.Entities;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace NorthWind.Sales.Backend.DataContexts.EFCore.DataContexts
 {
@@ -15,6 +11,8 @@ namespace NorthWind.Sales.Backend.DataContexts.EFCore.DataContexts
 	{
 		public DbSet<Order> Orders { get; set; }
 		public DbSet<Repositories.Entities.OrderDetail> OrderDetails { get; set; }
+		public DbSet<Customer> Customers { get; set; }
+		public DbSet<Product> Products { get; set; }
 		protected override void OnConfiguring(
 		DbContextOptionsBuilder optionsBuilder)
 		{
