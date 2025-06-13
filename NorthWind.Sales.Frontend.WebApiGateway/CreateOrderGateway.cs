@@ -24,6 +24,11 @@ namespace NorthWind.Sales.Frontend.WebApiGateways
 			{
 				result = await response.Content.ReadFromJsonAsync<CreateOrderResponseDto>();
 			}
+			else
+			{
+				throw new HttpRequestException(
+				await response.Content.ReadAsStringAsync());
+			}
 
 			// Fix: Return the OrderId property from the CreateOrderResponseDto object
 			return result?.OrderId ?? 0;

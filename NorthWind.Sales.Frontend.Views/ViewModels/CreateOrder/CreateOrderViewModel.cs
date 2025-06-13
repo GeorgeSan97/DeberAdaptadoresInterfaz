@@ -1,6 +1,7 @@
 ﻿using NorthWind.Sales.Entities.Dtos.CreateOrder;
 using NorthWind.Sales.Frontend.BusinessObjects.Interfaces;
 using NorthWind.Sales.Frontend.Views.Resources;
+using NorthWind.Validation.Entities.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +10,8 @@ using System.Threading.Tasks;
 
 namespace NorthWind.Sales.Frontend.Views.ViewModels.CreateOrder
 {
-	public class CreateOrderViewModel (ICreateOrderGateway gateway)
+	public class CreateOrderViewModel(ICreateOrderGateway gateway,
+	IModelValidatorHub<CreateOrderViewModel> validator)
 	{
 		#region Propiedades realcionadas a CreateOrderDto
 		public string CustomerId { get; set; } 
@@ -19,6 +21,7 @@ namespace NorthWind.Sales.Frontend.Views.ViewModels.CreateOrder
 		public string ShipPostalCode { get; set; }
 		public List<CreateOrderDetailViewModel> OrderDetails { get; set; } = [];
 		#endregion
+		public IModelValidatorHub<CreateOrderViewModel> Validator => validator; 
 
 		public string InformationMessage { get; private set; }
 

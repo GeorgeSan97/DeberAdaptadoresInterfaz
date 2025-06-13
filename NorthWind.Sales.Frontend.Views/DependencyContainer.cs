@@ -10,6 +10,10 @@ namespace NorthWind.Sales.Frontend.Views
 		this IServiceCollection services)
 		{
 			services.AddScoped<CreateOrderViewModel>();
+			services.AddModelValidator<CreateOrderViewModel,
+			CreateOrderViewModelValidator>();
+
+
 			return services;
 		}
 	}
