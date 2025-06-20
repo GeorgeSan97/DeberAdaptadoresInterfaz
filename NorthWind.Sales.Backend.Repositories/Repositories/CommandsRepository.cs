@@ -1,5 +1,5 @@
-﻿// Adonet
-/*
+﻿/*
+ //Ado.net
 using Microsoft.Data.SqlClient;
 using System.Data;
 using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
@@ -167,28 +167,28 @@ namespace NorthWind.Sales.Backend.Repositories.Repositories
 
 
 			const string insertOrderSql = @"
-INSERT INTO Orders(
-    CustomerId,
-    ShipAddress,
-    ShipCity,
-    ShipCountry,
-    ShipPostalCode,
-    ShippingType,
-    DiscountType,
-    Discount,
-    OrderDate)
-VALUES (
-    @CustomerId,
-    @ShipAddress,
-    @ShipCity,
-    @ShipCountry,
-    @ShipPostalCode,
-    @ShippingType,
-    @DiscountType,
-    @Discount,
-    @OrderDate);
+											INSERT INTO Orders(
+												CustomerId,
+												ShipAddress,
+												ShipCity,
+												ShipCountry,
+												ShipPostalCode,
+												ShippingType,
+												DiscountType,
+												Discount,
+												OrderDate)
+											VALUES (
+												@CustomerId,
+												@ShipAddress,
+												@ShipCity,
+												@ShipCountry,
+												@ShipPostalCode,
+												@ShippingType,
+												@DiscountType,
+												@Discount,
+												@OrderDate);
 
-SELECT CAST(SCOPE_IDENTITY() AS INT);";
+											SELECT CAST(SCOPE_IDENTITY() AS INT);";
 
 			var orderId = await _connection.ExecuteScalarAsync<int>(
 				insertOrderSql,
@@ -209,16 +209,16 @@ SELECT CAST(SCOPE_IDENTITY() AS INT);";
 			order.Id = orderId;
 
 			const string insertDetailSql = @"
-INSERT INTO OrderDetails(
-    OrderId,
-    ProductId,
-    UnitPrice,
-    Quantity)
-VALUES (
-    @OrderId,
-    @ProductId,
-    @UnitPrice,
-    @Quantity);";
+											INSERT INTO OrderDetails(
+												OrderId,
+												ProductId,
+												UnitPrice,
+												Quantity)
+											VALUES (
+												@OrderId,
+												@ProductId,
+												@UnitPrice,
+												@Quantity);";
 
 			var detailParameters = order.OrderDetails.Select(d => new
 			{
