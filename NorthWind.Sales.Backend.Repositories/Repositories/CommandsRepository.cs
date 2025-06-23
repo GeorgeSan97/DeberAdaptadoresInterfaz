@@ -10,7 +10,7 @@ namespace NorthWind.Sales.Backend.Repositories.Repositories
 	/// <summary>
 	/// Versión ADO.NET pura del repositorio de comandos.
 	/// Mantiene la misma lógica (transacción única, métodos asíncronos) pero sin Dapper.
-	/// </summary>
+	/// </summary>hi
 	public sealed class CommandsRepository : ICommandsRepository
 	{
 		private readonly SqlConnection _connection;
