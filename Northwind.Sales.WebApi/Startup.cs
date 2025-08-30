@@ -7,7 +7,7 @@ namespace Northwind.Sales.WebApi
 	{
 		public static WebApplication CreateWebaApplication(this WebApplicationBuilder builder)
 		{
-
+			
 			//configurar el APIExplorer para descubrir y exponer 
 			//los metadatos de los "endpints" de la aplicacion.
 			builder.Services.AddEndpointsApiExplorer();
@@ -40,6 +40,7 @@ namespace Northwind.Sales.WebApi
 		}
 
 		public static WebApplication ConfigureWebApplication(this WebApplication app){
+			app.UseExceptionHandler(builder => { });
 			// Habilitar el middleware para que se muestre la información en fomrato JSON
 			// y la interfaz UI de Swagger lo pueda viusalizar en el desarrollo
 			if (app.Environment.IsDevelopment())

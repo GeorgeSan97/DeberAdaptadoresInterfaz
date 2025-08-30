@@ -20,7 +20,11 @@ public static  class DependencyContainer
 		.AddPresenters()
 		.AddValidationService()
 		.AddValidators();
+		
+
 
 		return services;
 	}
 }
+
+

@@ -1,7 +1,9 @@
-﻿using NorthWind.Sales.Entities.Dtos.CreateOrder;
+﻿using NorthWind.RazorComponents.Validators;
+using NorthWind.Sales.Entities.Dtos.CreateOrder;
 using NorthWind.Sales.Frontend.BusinessObjects.Interfaces;
 using NorthWind.Sales.Frontend.Views.Resources;
 using NorthWind.Validation.Entities.Interfaces;
+using NorthWind.Validation.Entities.ValueObjects;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -13,6 +15,8 @@ namespace NorthWind.Sales.Frontend.Views.ViewModels.CreateOrder
 	public class CreateOrderViewModel(ICreateOrderGateway gateway,
 	IModelValidatorHub<CreateOrderViewModel> validator)
 	{
+		public ModelValidator<CreateOrderViewModel> ModelValidatorComponentReference { get; set; }
+
 		#region Propiedades realcionadas a CreateOrderDto
 		public string CustomerId { get; set; } 
 		public string ShipAddress { get; set; } 
@@ -33,11 +37,28 @@ namespace NorthWind.Sales.Frontend.Views.ViewModels.CreateOrder
 		public async Task Send()
 		{
 			InformationMessage = "";
-			var OrderId = await gateway.CreateOrderAsync(
-			(CreateOrderDto)this);
-			InformationMessage = string.Format(
-			CreateOrderMessages.CreatedOrderTemplate, OrderId);
+			try
+			{
+				var OrderId = await gateway.CreateOrderAsync(
+				(CreateOrderDto)this);
+				InformationMessage = string.Format(
+				CreateOrderMessages.CreatedOrderTemplate, OrderId);
+			}
+			catch (HttpRequestException ex)
+			{
+				if (ex.Data.Contains("Errors"))
+				{
+					IEnumerable<ValidationError> Errors =
+					ex.Data["Errors"] as IEnumerable<ValidationError>;
+					ModelValidatorComponentReference.AddErrors(Errors);
+				}
+				else
+				{
+					throw;
+				}
+			}
 		}
+
 
 		public static explicit operator CreateOrderDto(
 		CreateOrderViewModel model) =>
@@ -49,3 +70,17 @@ namespace NorthWind.Sales.Frontend.Views.ViewModels.CreateOrder
 		));
 	}
 }
+
+
+/*
+ 
+ public async Task Send()
+		{
+			InformationMessage = "";
+			var OrderId = await gateway.CreateOrderAsync(
+			(CreateOrderDto)this);
+			InformationMessage = string.Format(
+			CreateOrderMessages.CreatedOrderTemplate, OrderId);
+		}
+ 
+ */

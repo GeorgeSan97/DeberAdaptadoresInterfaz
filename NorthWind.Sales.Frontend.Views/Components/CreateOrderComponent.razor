@@ -1,6 +1,7 @@
 ﻿<EditForm Model=Order OnValidSubmit="Order.Send">
    
-    <ModelValidator Validator="Order.Validator"/>
+    <ModelValidator Validator="Order.Validator" @ref=Order.ModelValidatorComponentReference />
+
     <ValidationSummary/>
 
     <div class="form-group">
