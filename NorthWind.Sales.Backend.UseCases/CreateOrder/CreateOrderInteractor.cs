@@ -1,4 +1,5 @@
-﻿using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
+﻿using NorthWind.Events.Entities.Services;
+using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
 using NorthWind.Sales.Backend.BusinessObjects.Guards;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.CreateOrder;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.Repositories;
@@ -49,7 +50,8 @@ namespace NorthWind.Sales.Backend.UseCases.CreateOrder;
 internal class CreateOrderInteractor(
     ICreateOrderOutputPort outputPort,
     ICommandsRepository repository,
-    IModelValidatorHub<CreateOrderDto> modelValidatorHub) : 
+    IModelValidatorHub<CreateOrderDto> modelValidatorHub,
+    IDomainEventHub<SpecialOrderCreatedEvent> domainEventHub) : 
     ICreateOrderInputPort
 {
 
@@ -74,9 +76,9 @@ internal class CreateOrderInteractor(
 	//  2).- Una vez que se recibe los datos necesarios para realizar el proceso (desde un "Dto" se mapea(transforma) a un objeto
 	//       de tipo "OrderAggregate" para construir la orden (maestro-detalle).
 	OrderAggregate Order = OrderAggregate.From(orderDto);
-
-    //  3).- Guardar la orden (agregado).
-    await repository.CreateOrder(Order);
+		
+		//  3).- Guardar la orden (agregado).
+		await repository.CreateOrder(Order);
 
     //  4).- Confirmar los cambios en la base de datos y tratar todo como una unidad o
     //       "Transacción", en este caso es un maestro/detalle, usando para esto el patron
@@ -88,5 +90,12 @@ internal class CreateOrderInteractor(
     //       para que algún agente externo los utilice (por ejemplo, se puede utilizar en una
     //       página web para mostrar la respuesta al usuario).
     await outputPort.Handle(Order);
-  }
+		
+		if (Order.OrderDetails.Count > 3)
+		{
+			await domainEventHub.Raise(
+		   new SpecialOrderCreatedEvent(
+		   Order.Id, Order.OrderDetails.Count));
+		}
+	}
 }

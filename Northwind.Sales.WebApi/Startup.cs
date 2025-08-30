@@ -1,4 +1,5 @@
 ﻿using NorthWind.Sales.Backend.DataContexts.EFCore.Options;
+using NorthWind.Sales.Backend.SmtpGateways.Options;
 
 
 namespace Northwind.Sales.WebApi
@@ -7,7 +8,7 @@ namespace Northwind.Sales.WebApi
 	{
 		public static WebApplication CreateWebaApplication(this WebApplicationBuilder builder)
 		{
-
+			
 			//configurar el APIExplorer para descubrir y exponer 
 			//los metadatos de los "endpints" de la aplicacion.
 			builder.Services.AddEndpointsApiExplorer();
@@ -19,7 +20,12 @@ namespace Northwind.Sales.WebApi
 
 			// Registrar los servicios de la aplicación que se va a exponer
 			builder.Services.AddNorthWindSalesServices(
-				dbOptions => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(dbOptions));
+				dbOptions => 
+					builder.Configuration.GetSection(DBOptions.SectionKey)
+					.Bind(dbOptions),
+				SmtpOptions => 
+				builder.Configuration.GetSection(SmtpOptions.SectionKey)
+				.Bind(SmtpOptions));
 
 			//Agregar el Servicio CORS para los clientes (Web, Windows, Móvil, etc. ) que se ejecuten
 			//en el navegador Web (Blazor, React, Angular)
@@ -40,6 +46,7 @@ namespace Northwind.Sales.WebApi
 		}
 
 		public static WebApplication ConfigureWebApplication(this WebApplication app){
+			app.UseExceptionHandler(builder => { });
 			// Habilitar el middleware para que se muestre la información en fomrato JSON
 			// y la interfaz UI de Swagger lo pueda viusalizar en el desarrollo
 			if (app.Environment.IsDevelopment())

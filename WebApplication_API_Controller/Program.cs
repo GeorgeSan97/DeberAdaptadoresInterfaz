@@ -9,8 +9,8 @@ namespace Northwind.Sales.WebApiControllers
 		{
 			var builder = WebApplication.CreateBuilder(args);
 
-			builder.Services.AddNorthWindSalesServices(options =>
-			builder.Configuration.GetSection(DBOptions.SectionKey).Bind(options));
+			builder.Services.AddNorthWindSalesServices(options => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(options),
+													SmtpOptions => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(SmtpOptions));
 
 			builder.Services.AddControllers();
 			builder.Services.AddEndpointsApiExplorer();

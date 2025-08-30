@@ -62,8 +62,8 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 builder.Services.AddScoped<ICommandsRepository, CommandsRepository>();
 
 // Registra el resto de servicios de NorthWind (ya existentes)
-builder.Services.AddNorthWindSalesServices(opts =>
-	builder.Configuration.GetSection(DBOptions.SectionKey).Bind(opts));
+builder.Services.AddNorthWindSalesServices(opts => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(opts),
+											SmtpOpts => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(SmtpOpts));
 
 // ──────────────────────────────────────────────
 //  Build & middleware

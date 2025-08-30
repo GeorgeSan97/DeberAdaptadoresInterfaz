@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NorthWind.HttpDelegatingHandlers;
 using NorthWind.Sales.Frontend.BusinessObjects.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -14,8 +15,10 @@ namespace NorthWind.Sales.Frontend.WebApiGateways
 			this IServiceCollection services, 
 			Action<HttpClient> configureHttpClient)
 		{
+			services.AddExceptionDelegatingHandler();
 			services.AddHttpClient<ICreateOrderGateway,
-				CreateOrderGateway>(configureHttpClient);
+				CreateOrderGateway>(configureHttpClient)
+				.AddHttpMessageHandler<ExceptionDelegatingHandler>();
 			return services;
 		}
 	}

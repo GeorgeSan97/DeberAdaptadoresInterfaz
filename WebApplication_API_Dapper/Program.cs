@@ -7,6 +7,7 @@ using NorthWind.Sales.Entities.Dtos.CreateOrder;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.CreateOrder;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.Repositories;
 using NorthWind.Sales.Backend.Repositories.Repositories;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -55,8 +56,8 @@ builder.Services.AddScoped<IDbConnection>(sp =>
 builder.Services.AddScoped<ICommandsRepository, CommandsRepository>();
 
  
-builder.Services.AddNorthWindSalesServices(opts =>
-	builder.Configuration.GetSection(DBOptions.SectionKey).Bind(opts));
+builder.Services.AddNorthWindSalesServices(opts => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(opts),
+									   SmtpOpts => builder.Configuration.GetSection(DBOptions.SectionKey).Bind(SmtpOpts));
 
 var app = builder.Build();
 

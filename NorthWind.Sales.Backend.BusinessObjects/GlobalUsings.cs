@@ -9,7 +9,10 @@ global using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
 
 // Para: Repositories
 //global using NorthWind.Sales.Backend.BusinessObjects.Aggregates;
-global using NorthWind.Sales.Backend.BusinessObjects.Interfaces.Common;
+//global using NorthWind.Sales.Backend.BusinessObjects.Interfaces.Common;
 
 // Para: POCOEntities
 global using NorthWind.Sales.Backend.BusinessObjects.Enums;
+
+global using NorthWind.Entities.Interfaces;
+

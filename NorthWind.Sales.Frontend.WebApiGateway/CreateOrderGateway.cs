@@ -16,6 +16,30 @@ namespace NorthWind.Sales.Frontend.WebApiGateways
 	{
 		public async Task<int> CreateOrderAsync(CreateOrderDto order)
 		{
+			var response = await client.PostAsJsonAsync(Endpoints.CreateOrder, order);
+
+			if (response.IsSuccessStatusCode)
+			{
+				var result = await response.Content.ReadFromJsonAsync<CreateOrderResponseDto>();
+
+				// Retorna solo el Id de la orden creada
+				return result?.OrderId ?? 0;
+			}
+			else
+			{
+				throw new HttpRequestException(await response.Content.ReadAsStringAsync());
+			}
+		}
+
+	}
+}
+
+
+/*
+ 
+
+public async Task<int> CreateOrderAsync(CreateOrderDto order)
+		{
 			CreateOrderResponseDto result = null;
 
 			var response = await client.PostAsJsonAsync(Endpoints.CreateOrder, order);
@@ -33,5 +57,7 @@ namespace NorthWind.Sales.Frontend.WebApiGateways
 			// Fix: Return the OrderId property from the CreateOrderResponseDto object
 			return result?.OrderId ?? 0;
 		}
-	}
-}
+
+
+
+ */

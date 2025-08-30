@@ -1,4 +1,5 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
+using NorthWind.Entities.Interfaces;
 using NorthWind.Sales.Backend.BusinessObjects.Interfaces.CreateOrder;
 using NorthWind.Sales.Backend.UseCases.CreateOrder;
 using NorthWind.Sales.Entities.Dtos.CreateOrder;
@@ -21,7 +22,11 @@ public static class DependencyContainer
 	services.AddModelValidator<CreateOrderDto,
 	CreateOrderProductValidator>();
 
-	// IoC Container: retorne el servicio con la inyeccion
-	return services;
+	services.AddScoped<IDomainEventHandler<SpecialOrderCreatedEvent>,
+	SendEMailWhenSpecialOrderCreatedEventHandler>();
+
+
+		// IoC Container: retorne el servicio con la inyeccion
+		return services;
   }
 }
